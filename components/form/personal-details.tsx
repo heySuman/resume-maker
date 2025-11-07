@@ -1,35 +1,12 @@
 "use client";
-import { z } from "zod";
-import { Form } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormProvider, useForm } from "react-hook-form";
-import InputField from "@/components/custom/input-field";
-import { usePersonalDetails } from "@/store/resume-store";
-import { initialPersonalDetails, PersonalDetail } from "@/types/personal-details";
 
-const formSchema = z.object({
-    fullName: z.string(),
-    email: z.email(),
-    address: z.string(),
-    city: z.string(),
-    country: z.string(),
-    phone: z.string(),
-    postalCode: z.string(),
-});
+import { Controller, useFormContext } from "react-hook-form";
+import { Field, FieldError, FieldLabel } from "../ui/field";
+import { Input } from "../ui/input";
 
 export default function PersonalForm() {
 
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: initialPersonalDetails,
-    });
-
-    const updatePersonalDetails = usePersonalDetails((state) => state.setPersonalDetails)
-
-    const onSubmit = (data: PersonalDetail) => {
-        updatePersonalDetails(data);
-    }
+    const { control } = useFormContext();
 
     return (
         <div className="w-full">
@@ -38,52 +15,24 @@ export default function PersonalForm() {
                 This page is designed to collect personal details from users.
             </p>
 
-            <FormProvider {...form}>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                        <InputField
-                            label="Full Name"
-                            name="fullName"
-                            placeholder="Enter your fullname" />
-
-                        <div className="w-full flex justify-between gap-2">
-                            <InputField
-                                label="Email"
-                                className="flex-1"
-                                name="email"
-                                placeholder="Enter your email" />
-
-                            <InputField
-                                label="Phone"
-                                className="flex-1"
-                                name="phone"
-                                placeholder="Enter your phone number" />
-
-                        </div>
-
-                        <InputField
-                            label="Address"
-                            name="address"
-                            placeholder="Enter your address" />
-
-                        <div className="w-full flex justify-between gap-2">
-                            <InputField
-                                label="Country"
-                                name="country"
-                                className="flex-1"
-                                placeholder="Enter your country" />
-
-                            <InputField
-                                label="Postal Code"
-                                name="postalCode"
-                                className="flex-1"
-                                placeholder="Enter your postal address" />
-                        </div>
-
-                        <Button>Save</Button>
-                    </form>
-                </Form>
-            </FormProvider>
+            <Controller
+                name="fullName"
+                control={control}
+                render={({ field, fieldState }) => (
+                    <Field>
+                        <Field>
+                            <FieldLabel htmlFor="fullName">
+                                Name
+                            </FieldLabel>
+                            <Input
+                                placeholder="Enter your name"
+                                {...field}
+                            />
+                            {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                        </Field>
+                    </Field>
+                )}
+            />
         </div >
     )
 }

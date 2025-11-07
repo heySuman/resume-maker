@@ -1,11 +1,25 @@
 "use client"
 
+import { Field } from "../ui/field";
 import { Button } from "../ui/button";
-import React, { useState } from "react";
-import { ButtonGroup } from "../ui/button-group";
+import React, { Activity, useState } from "react";
 import PersonalForm from "../form/personal-details";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Field } from "../ui/field";
+import * as z from "zod"
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { initialPersonalDetails } from "@/types/personal-details";
+import { Item } from "../ui/item";
+
+const personalDetail = z.object({
+    fullName: z.string().min(2, { error: "Name is required" }),
+    email: z.email().min(1, { error: "Email is required" }),
+    address: z.string().min(2, { error: "Address is required" }),
+    city: z.string().min(1, { error: "City is required" }),
+    country: z.string().min(1, { error: "Country is required" }),
+    phone: z.string().min(1, { error: "Phone is required" }),
+    postalCode: z.string().optional().nullable(),
+});
 
 export default function MultiStep() {
 
@@ -15,8 +29,25 @@ export default function MultiStep() {
         { name: "personal", component: PersonalForm }
     ]
 
+    const currentStep = steps[activeStep].name;
+
+    const form = useForm({
+        resolver: zodResolver(personalDetail),
+        defaultValues: {
+            ...initialPersonalDetails
+        }
+    })
+
     return (
-        <React.Fragment>
+        <Item>
+            <FormProvider {...form}>
+                <form action="" id="resume-form">
+                    <Activity mode={currentStep === "personal" ? "visible" : "hidden"}>
+                        <PersonalForm />
+                    </Activity>
+                </form>
+            </FormProvider>
+
             <Field orientation={"horizontal"}>
                 {
                     activeStep > 0 &&
@@ -43,6 +74,6 @@ export default function MultiStep() {
                     </Button>
                 }
             </Field>
-        </React.Fragment>
+        </Item>
     )
 } 
