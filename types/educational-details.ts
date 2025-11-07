@@ -4,8 +4,7 @@ export type EducationalDetails = {
     ongoing: boolean
     endDate: string
     degree: string
-    city: string
-    description: string
+    description?: string
 }
 
 export const initialEducationalDetails: EducationalDetails = {
@@ -14,7 +13,6 @@ export const initialEducationalDetails: EducationalDetails = {
     ongoing: true,
     endDate: "",
     degree: "",
-    city: "",
     description: ""
 }
 
