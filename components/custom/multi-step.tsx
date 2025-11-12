@@ -12,6 +12,8 @@ import { FormProvider, useForm } from "react-hook-form";
 import EducationalForm from "../form/educational-details";
 import { initialPersonalDetails } from "@/types/personal-details";
 import { initialEducationalDetails } from "@/types/educational-details";
+import { initialExperience } from "@/types/professional-details";
+import ProfessionalExperiencesForm from "../form/professional-details";
 
 const personalDetail = z.object({
     fullName: z.string().min(2, { error: "Name is required" }),
@@ -40,7 +42,8 @@ export default function MultiStep() {
     const [activeStep, setActiveStep] = useState(0);
     const steps = [
         { name: "personal", component: PersonalForm },
-        { name: "educational", component: EducationalForm }
+        { name: "educational", component: EducationalForm },
+        { name: "professional", component: ProfessionalExperiencesForm },
     ]
 
     const currentStep = steps[activeStep].name;
@@ -49,7 +52,8 @@ export default function MultiStep() {
         resolver: zodResolver(resumeDetails),
         defaultValues: {
             ...initialPersonalDetails,
-            ...initialEducationalDetails
+            ...initialEducationalDetails,
+            ...initialExperience
         }
     })
 
@@ -61,12 +65,18 @@ export default function MultiStep() {
     return (
         <Item>
             <FormProvider {...form}>
-                <form id="resume-form" onSubmit={form.handleSubmit(onSubmit)}>
+                <form
+                    id="resume-form"
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="md:w-1/3">
                     <Activity mode={currentStep === "personal" ? "visible" : "hidden"}>
                         <PersonalForm />
                     </Activity>
                     <Activity mode={currentStep === "educational" ? "visible" : "hidden"}>
                         <EducationalForm />
+                    </Activity>
+                    <Activity mode={currentStep === "professional" ? "visible" : "hidden"}>
+                        <ProfessionalExperiencesForm />
                     </Activity>
                 </form>
             </FormProvider>
