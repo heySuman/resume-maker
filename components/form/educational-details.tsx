@@ -1,11 +1,11 @@
 "use client";
 
+import { Input } from "../ui/input";
+import { Checkbox } from "../ui/checkbox";
+import { Textarea } from "../ui/textarea";
+import { DatePicker } from "../ui/date-picker";
 import { Controller, useFormContext } from "react-hook-form";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { Checkbox } from "../ui/checkbox";
-import { DatePicker } from "../ui/date-picker";
 
 export default function EducationalForm() {
 

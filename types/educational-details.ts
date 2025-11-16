@@ -2,7 +2,7 @@ export type EducationalDetails = {
     institute: string
     startDate: string
     ongoing: boolean
-    endDate: string
+    endDate?: string
     degree: string
     description?: string
 }
