@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
-import { useResumeStore } from "@/store/resume-store";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, FormProvider } from "react-hook-form";
-import { resumeSchema } from "@/schemas/resume";
 import * as z from "zod";
+import { useEffect } from "react";
+import Stepper from "./stepper";
+import { resumeSchema } from "@/schemas/resume";
 import { ResumeStoreData } from "@/types/resume";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useResumeStore } from "@/store/resume-store";
+import { useForm, FormProvider } from "react-hook-form";
 
 export default function ResumeForm() {
   const { formData, setField } = useResumeStore();
@@ -27,7 +28,9 @@ export default function ResumeForm() {
 
   return (
     <FormProvider {...form}>
-      <form>{/* <Stepper/> */}</form>
+      <form>
+        <Stepper />
+      </form>
     </FormProvider>
   );
 }
